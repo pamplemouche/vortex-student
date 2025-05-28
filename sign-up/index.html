@@ -177,7 +177,7 @@ const loginLink = document.getElementById('loginLink');
 if (loginLink) {
     loginLink.addEventListener('click', function(event) {
         event.preventDefault();
-        if (WEB_APP_URL === 'YOUR_WEB_APP_URL' || !WEB_APP_URL.startsWith('http')) {
+        if (WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbwYmH-tWcg9LmT8LN1VizZ3WwaHdcJJBXmC3zcKn6DU9ATMSFO7rujNXPWlzsqTWixfag/exec' || !WEB_APP_URL.startsWith('http')) {
             const messageDiv = document.getElementById('message');
             if (messageDiv) {
                 messageDiv.textContent = 'Erreur: Veuillez configurer l\'URL de l\'application web avant de naviguer.';
