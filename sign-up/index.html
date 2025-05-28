@@ -89,5 +89,107 @@
             }
         });
     </script>
+    <script>
+        // IMPORTANT: Pour que ce script fonctionne, vous devez inclure la bibliothèque CryptoJS
+// dans la section <head> de votre fichier HTML, comme ceci :
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js">
+
+// IMPORTANT: REMPLACEZ 'YOUR_WEB_APP_URL' ci-dessous par l'URL de votre application web Apps Script déployée.
+// Exemple: const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz_YOUR_DEPLOYMENT_ID_HERE/exec';
+const WEB_APP_URL = 'YOUR_WEB_APP_URL';
+
+// Assurez-vous que l'ID de votre formulaire d'inscription est 'registrationForm'
+// Si ce n'est pas le cas, modifiez 'registrationForm' pour correspondre à l'ID réel.
+document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    const messageDiv = document.getElementById('message'); // Élément pour afficher les messages à l'utilisateur
+    if (messageDiv) {
+        messageDiv.textContent = 'Envoi en cours...';
+        messageDiv.className = 'mt-6 text-center text-base font-medium text-gray-600';
+    }
+
+    // Vérifie si l'URL de l'application web a été remplacée
+    if (WEB_APP_URL === 'YOUR_WEB_APP_URL' || !WEB_APP_URL.startsWith('http')) {
+        if (messageDiv) {
+            messageDiv.textContent = 'Erreur: Veuillez remplacer "YOUR_WEB_APP_URL" dans le code JavaScript par l\'URL de votre application web Apps Script déployée.';
+            messageDiv.className = 'mt-6 text-center text-base font-medium text-red-600';
+        }
+        console.error('Erreur: WEB_APP_URL n\'est pas configurée. Veuillez remplacer "YOUR_WEB_APP_URL" par l\'URL de votre application web Apps Script déployée.');
+        return; // Arrête l'exécution si l'URL n'est pas valide
+    }
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = {};
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+
+    // --- LOGIQUE DE HACHAGE DU MOT DE PASSE ---
+    // Le champ du mot de passe doit avoir l'attribut `name="password"` dans votre HTML.
+    if (data.password) {
+        // Hache le mot de passe en utilisant SHA-256 et le convertit en chaîne hexadécimale.
+        data.password = CryptoJS.SHA256(data.password).toString();
+        // Pour le débogage, vous pouvez décommenter la ligne ci-dessous,
+        // mais assurez-vous de la supprimer en production pour ne pas exposer les hachages.
+        // console.log("Mot de passe haché (pour debug):", data.password);
+    }
+    // ------------------------------------------
+
+    data.action = 'register'; // Ajoute un paramètre d'action pour différencier les requêtes côté Apps Script
+
+    try {
+        const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded', // Format attendu par Apps Script doPost
+            },
+            body: new URLSearchParams(data).toString(), // Convertit l'objet en chaîne URL encodée
+        });
+
+        const result = await response.json(); // Assurez-vous que le script Apps retourne du JSON
+
+        if (result.success) {
+            if (messageDiv) {
+                messageDiv.textContent = 'Inscription réussie !';
+                messageDiv.className = 'mt-6 text-center text-base font-medium text-green-600';
+            }
+            form.reset(); // Réinitialise le formulaire après une inscription réussie
+        } else {
+            if (messageDiv) {
+                messageDiv.textContent = 'Erreur: ' + result.error;
+                messageDiv.className = 'mt-6 text-center text-base font-medium text-red-600';
+            }
+        }
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi du formulaire:', error);
+        if (messageDiv) {
+            messageDiv.textContent = 'Une erreur est survenue lors de l\'envoi. Vérifiez la console pour plus de détails.';
+            messageDiv.className = 'mt-6 text-center text-base font-medium text-red-600';
+        }
+    }
+});
+
+// Gère le lien vers la page de connexion (si vous en avez un sur votre page d'inscription)
+// Assurez-vous que l'ID de votre lien est 'loginLink'.
+const loginLink = document.getElementById('loginLink');
+if (loginLink) {
+    loginLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (WEB_APP_URL === 'YOUR_WEB_APP_URL' || !WEB_APP_URL.startsWith('http')) {
+            const messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.textContent = 'Erreur: Veuillez configurer l\'URL de l\'application web avant de naviguer.';
+                messageDiv.className = 'mt-6 text-center text-base font-medium text-red-600';
+            }
+            console.error('Erreur: WEB_APP_URL n\'est pas configurée pour la redirection.');
+            return;
+        }
+        window.location.href = WEB_APP_URL + '?page=login'; // Redirige vers la page de connexion gérée par Apps Script
+    });
+}
+
+    </script>
 </body>
 </html>
