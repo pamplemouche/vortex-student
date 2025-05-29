@@ -27,10 +27,14 @@
       <span id="monChiffre" style="font-weight: bold; color: #333;">0</span>
     </div>
   </nav>
-  <script>
-    // Variable chiffre dynamique
-    var monChiffre = 42;
-    document.getElementById('monChiffre').textContent = monChiffre;
-  </script>
+<script>
+  // Affiche le chiffre stocké (ou 0 si absent)
+  document.getElementById('monChiffre').textContent = localStorage.getItem('monChiffre') || 0;
+
+  // Optionnel : mets à jour dynamiquement si la page reste ouverte pendant le changement sur l’autre page
+  window.addEventListener('storage', function() {
+    document.getElementById('monChiffre').textContent = localStorage.getItem('monChiffre') || 0;
+  });
+</script>
 </body>
 </html>
