@@ -12,9 +12,25 @@
     }
 </script>
   <head>
-    
+    <title>Salut</title>
   </head>
-  <body>
-    
-  </body>
+<body>
+  <nav style="display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; background: #f5f5f5; border-bottom: 1px solid #ddd;">
+    <div>
+      <!-- Ajoute ici ton logo principal ou le nom du site si besoin -->
+      <span style="font-weight: bold; font-size: 1.2em;">Vortex Student</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <!-- Logo à droite -->
+      <img src="ton-logo.png" alt="Logo" style="height: 32px;">
+      <!-- Chiffre dynamique -->
+      <span id="monChiffre" style="font-weight: bold; color: #333;">0</span>
+    </div>
+  </nav>
+  <script>
+    // Variable chiffre dynamique
+    var monChiffre = 42;
+    document.getElementById('monChiffre').textContent = monChiffre;
+  </script>
+</body>
 </html>
