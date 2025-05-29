@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contrôle du chiffre</title>
+</head>
+<body>
+  <button onclick="modifierChiffre(1)">Ajouter</button>
+  <button onclick="modifierChiffre(-1)">Réduire</button>
+
+  <script>
+    function modifierChiffre(val) {
+      // Récupère le chiffre actuel ou 0 si non défini
+      let chiffre = parseInt(localStorage.getItem('monChiffre') || '0', 10);
+      chiffre += val;
+      localStorage.setItem('monChiffre', chiffre);
+      alert("Nouveau chiffre : " + chiffre);
+    }
+  </script>
+</body>
+</html>
