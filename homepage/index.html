@@ -29,12 +29,42 @@
   </nav>
 <script>
   // Affiche le chiffre stocké (ou 0 si absent)
-  document.getElementById('monChiffre').textContent = localStorage.getItem('monChiffre') || 0;
+  fetch('https://script.google.com/macros/s/XXXXXXXXXXXX/exec')
+  .then(response => response.text())
+  .then(value => {
+    document.getElementById('monChiffre').textContent = value;
+    localStorage.setItem('monChiffre', value); // Mets à jour localStorage si tu veux
+  });
 
   // Optionnel : mets à jour dynamiquement si la page reste ouverte pendant le changement sur l’autre page
-  window.addEventListener('storage', function() {
-    document.getElementById('monChiffre').textContent = localStorage.getItem('monChiffre') || 0;
+function sauvegarderMonChiffre(nouveauChiffre) {
+  fetch('https://script.google.com/macros/s/XXXXXXXXXXXX/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'value=' + encodeURIComponent(nouveauChiffre)
+  })
+  .then(response => response.text())
+  .then(result => {
+    // Optionnel: notifier l'utilisateur que c'est sauvegardé
+    console.log('Sauvegardé !');
   });
+}
 </script>
+  <script>
+    // Au chargement, récupère la valeur sauvegardée côté Apps Script
+fetch('https://script.google.com/macros/s/XXXXXXXXXXXX/exec')
+  .then(r => r.text())
+  .then(value => {
+    document.getElementById('monChiffre').textContent = value;
+    localStorage.setItem('monChiffre', value);
+  });
+
+// Pour sauvegarder (par exemple quand tu cliques sur un bouton)
+function updateChiffre(nouveauChiffre) {
+  sauvegarderMonChiffre(nouveauChiffre);
+  document.getElementById('monChiffre').textContent = nouveauChiffre;
+  localStorage.setItem('monChiffre', nouveauChiffre);
+}
+  </script>
 </body>
 </html>
