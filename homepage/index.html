@@ -29,7 +29,7 @@
   </nav>
 <script>
   // Affiche le chiffre stocké (ou 0 si absent)
-  fetch('https://script.google.com/macros/s/XXXXXXXXXXXX/exec')
+  fetch('https://script.google.com/macros/s/AKfycbzVXns6_1tCoWAR9FZpQ7FJA1Y2G0Uw30xqOMHylETt17i4JyWt-dD6-xccpmS6AHIc/exec')
   .then(response => response.text())
   .then(value => {
     document.getElementById('monChiffre').textContent = value;
@@ -38,7 +38,7 @@
 
   // Optionnel : mets à jour dynamiquement si la page reste ouverte pendant le changement sur l’autre page
 function sauvegarderMonChiffre(nouveauChiffre) {
-  fetch('https://script.google.com/macros/s/XXXXXXXXXXXX/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbzVXns6_1tCoWAR9FZpQ7FJA1Y2G0Uw30xqOMHylETt17i4JyWt-dD6-xccpmS6AHIc/exec', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: 'value=' + encodeURIComponent(nouveauChiffre)
@@ -52,7 +52,7 @@ function sauvegarderMonChiffre(nouveauChiffre) {
 </script>
   <script>
     // Au chargement, récupère la valeur sauvegardée côté Apps Script
-fetch('https://script.google.com/macros/s/XXXXXXXXXXXX/exec')
+fetch('https://script.google.com/macros/s/AKfycbzVXns6_1tCoWAR9FZpQ7FJA1Y2G0Uw30xqOMHylETt17i4JyWt-dD6-xccpmS6AHIc/exec')
   .then(r => r.text())
   .then(value => {
     document.getElementById('monChiffre').textContent = value;
