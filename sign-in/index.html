@@ -53,35 +53,33 @@
     <button onclick="doLogin()">Se connecter</button>
     <div id="message"></div>
   </div>
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault(); // Empêche le rechargement de la page
 
-  <script>
-    function doLogin() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
 
-      // On appelle la fonction côté serveur pour vérifier les identifiants
-      google.script.run
-        .withSuccessHandler(onLoginSuccess)
-        .withFailureHandler(onLoginFailure)
-        .checkCredentials(username, password);
-    }
+  // Remplace l'URL ci-dessous par l'URL de ton Apps Script déployé en mode "Web App"
+  var scriptURL = "https://script.google.com/macros/s/AKfycbwjItrul3ZUEO8x_KVgm8fzMKtl86KgEYoN0BsZ4tuO-JFQo-Kh1fUKogQSwKkdizqKNQ/exec";
 
-    function onLoginSuccess(isLoggedIn) {
-      if (isLoggedIn) {
-        // Si la connexion est réussie, on peut rediriger ou faire autre chose
-        document.getElementById('message').innerText = "Connexion réussie ! Redirection...";
-        window.location.href = 'pamplemouche.github.io/vortex-student/homepage'
-        // Par exemple, rediriger vers une page "dashboard"
-        // window.location.href = 'URL_DE_TA_PAGE_APRES_CONNEXION';
-      } else {
-        document.getElementById('message').innerText = "Nom d'utilisateur ou mot de passe incorrect.";
-      }
-    }
-
-    function onLoginFailure(error) {
-      document.getElementById('message').innerText = "Erreur de connexion : " + error.message;
-      console.error("Erreur App Script :", error);
-    }
-  </script>
+  fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors", // retire si tu veux traiter la réponse
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(() => {
+    alert("Identifiants envoyés !");
+    // Redirection ou autres actions ici
+  })
+  .catch((error) => {
+    alert("Erreur lors de l'envoi : " + error.message);
+  });
+});
+</script>
 </body>
 </html>
